@@ -1,0 +1,34 @@
+diff --git a/t/rexec/rexec_count_stdout.c b/t/rexec/rexec_count_stdout.c
+index 8cb9ff932..f5e1985f8 100644
+--- a/t/rexec/rexec_count_stdout.c
++++ b/t/rexec/rexec_count_stdout.c
+@@ -69,8 +69,10 @@ void output_cb (flux_subprocess_t *p, const char *stream)
+         }
+     }
+ 
+-    if (lenp)
+-        fwrite (ptr, lenp, 1, fstream);
++    if (lenp) {
++        if (fwrite (ptr, lenp, 1, fstream) != lenp)
++            log_err ("fwrite");
++    }
+ 
+     if (!strcasecmp (stream, "stdout"))
+         stdout_count++;
+diff --git a/t/rexec/rexec_getline.c b/t/rexec/rexec_getline.c
+index b4a17c3ea..55fd57ffd 100644
+--- a/t/rexec/rexec_getline.c
++++ b/t/rexec/rexec_getline.c
+@@ -76,8 +76,10 @@ void output_cb (flux_subprocess_t *p, const char *stream)
+ 
+     if (!(ptr = flux_subprocess_getline (p, stream, &lenp)))
+         log_err_exit ("flux_subprocess_getline");
+-    if (lenp)
+-        fwrite (ptr, lenp, 1, fstream);
++    if (lenp) {
++        if (fwrite (ptr, lenp, 1, fstream) != lenp)
++            log_err ("fwrite");
++    }
+     else
+         fprintf (fstream, "EOF\n");
+ }

@@ -10,16 +10,24 @@ source:
   sha256: 9b8d7af1d8aaa7ee110bcb9815b6b8647af686de949097c9bb2a0269d5551051
   patches:
     - centos6.patch
+    - shell.patch
+    - clock_gettime.patch
+    - fwrite.patch
 
 build:
   number: 0
   skip: true  # [not linux]
+  script_env:
+    - FLUX_TESTS_LOGFILE=t
+    - debug=t
+  
 
 requirements:
   build:
     - {{ compiler('c') }}
     - make 
     - pkgconfig
+    - jq
   host:
     - python
     - zeromq
@@ -30,12 +38,15 @@ requirements:
     - sqlite
     - cffi
     - jsonschema
+    - ply
+    - sphinx
     - aspell
     - valgrind
     - {{ mpi }}
     - pyyaml
     - czmq
     - jansson
+    - lua-luaposix
   run:
     - python
 
